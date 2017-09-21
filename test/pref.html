@@ -1,0 +1,14 @@
+<script src="../index.js"></script>
+<script>
+var xhr = new XMLHttpRequest();
+xhr.open('get', 'large.diff.html', false);
+xhr.send(null);
+
+var text = xhr.responseText;
+
+console.time('parse');
+var a = gitDiffParser.parse(text);
+
+console.timeEnd('parse');
+// console.log(a)
+</script>
