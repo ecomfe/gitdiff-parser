@@ -1,4 +1,7 @@
-
+/**
+ * @file gitdiff 消息解析器
+ * @author errorrik(errorrik@gmail.com)
+ */
 
 (function (root) {
     var STAT_START = 2;
@@ -9,6 +12,12 @@
 
 
     var parser = {
+        /**
+         * 解析 gitdiff 消息
+         *
+         * @param {string} source gitdiff消息内容
+         * @return {Object}
+         */
         parse: function (source) {
             var infos = [];
             var stat = STAT_START;
@@ -85,6 +94,7 @@
                     if (line.indexOf('@@') === 0) {
                         var match = /^@@\s+-([0-9]+)(,([0-9]+))?\s+\+([0-9]+)(,([0-9]+))?/.exec(line)
                         currentHunk = {
+                            content: line,
                             oldStart: match[1] - 0,
                             newStart: match[4] - 0,
                             oldLines: match[3] - 0 || 0,
