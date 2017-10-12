@@ -43,7 +43,16 @@
                         newPath: segs[3].slice(2),
                         hunks: []
                     };
+
                     infos.push(currentInfo);
+
+
+                    // 1. 如果oldPath是/dev/null就是add
+                    // 2. 如果newPath是/dev/null就是delete
+                    // 3. 如果有 rename from foo.js 这样的就是rename
+                    // 4. 如果有 copy from foo.js 这样的就是copy
+                    // 5. 其它情况是modify
+                    var currentInfoType = null;
 
                     // read mode change
                     var nextLine = lines[i + 1];
@@ -62,28 +71,50 @@
 
                     // read similarity type and index
                     var simiLine;
-                    while ((simiLine = lines[++i])) {
+                    simiLoop: while ((simiLine = lines[++i])) {
                         var segs = simiLine.split(' ');
 
-                        if (segs[0] === 'index') {
-                            var revs = segs[1].split('..');
-                            currentInfo.oldRevision = revs[0];
-                            currentInfo.newRevision = revs[1];
+                        switch (segs[0]) {
+                            case 'diff': // diff --git
+                                i--;
+                                break simiLoop;
 
-                            if (segs[2]) {
-                                currentInfo.oldMode = currentInfo.newMode = segs[2];
-                            }
-                            stat = STAT_HUNK;
+                            case 'index':
+                                var revs = segs[1].split('..');
+                                currentInfo.oldRevision = revs[0];
+                                currentInfo.newRevision = revs[1];
 
-                            if (lines[i + 1].indexOf('---') === 0) {
-                                i += 2;
-                            }
-                            break;
+                                if (segs[2]) {
+                                    currentInfo.oldMode = currentInfo.newMode = segs[2];
+                                }
+                                stat = STAT_HUNK;
+
+                                var oldFileName = lines[i + 1];
+                                if (oldFileName.indexOf('---') === 0) {
+                                    var newFileName = lines[i + 2];
+
+                                    if (/\s\/dev\/null$/.test(oldFileName)) {
+                                        currentInfo.oldPath = '/dev/null';
+                                        currentInfoType = 'add';
+                                    }
+                                    else if (/\s\/dev\/null$/.test(newFileName)) {
+                                        currentInfo.newPath = '/dev/null';
+                                        currentInfoType = 'delete';
+                                    }
+
+                                    i += 2;
+                                }
+
+                                break simiLoop;
+
                         }
-                        else if (!currentInfo.type) {
-                            currentInfo.type = segs[0];
+                        
+                        if (!currentInfoType) {
+                            currentInfoType = segs[0];
                         }
                     }
+
+                    currentInfo.type = currentInfoType || 'modify';
                 }
                 else if (line.indexOf('Binary') === 0) {
                     currentInfo.isBinary = true;
