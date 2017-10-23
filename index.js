@@ -168,18 +168,13 @@
                                 break;
                         }
 
-                        currentHunk.changes.push(change);
+                        change.type && currentHunk.changes.push(change);
                     }
                 }
 
                 i++;
             }
 
-
-            // var len = source.length;
-            // for (var i = 0; i < len; i++) {
-            //     source.charAt(i);
-            // }
             return infos;
         }
     };
