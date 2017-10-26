@@ -147,24 +147,24 @@
                             case '+':
                                 change.type = 'insert';
                                 change.isInsert = true;
-                                changeNewLine++;
                                 change.lineNumber = changeNewLine;
+                                changeNewLine++;
                                 break;
 
                             case '-':
                                 change.type = 'delete';
                                 change.isDelete = true;
-                                changeOldLine++;
                                 change.lineNumber = changeOldLine;
+                                changeOldLine++;
                                 break;
 
                             case ' ':
                                 change.type = 'normal';
                                 change.isNormal = true;
-                                changeOldLine++;
-                                changeNewLine++;
                                 change.oldLineNumber = changeOldLine;
                                 change.newLineNumber = changeNewLine;
+                                changeOldLine++;
+                                changeNewLine++;
                                 break;
                         }
 
