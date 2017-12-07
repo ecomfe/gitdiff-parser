@@ -35,12 +35,43 @@
                 var line = lines[i];
 
                 if (line.indexOf('diff --git') === 0) {
-                    var segs = line.split(' ');
+                    var filesStr = line.slice(11);
+                    var oldPath = null;
+                    var newPath = null;
+                    console.log(filesStr)
+
+                    var quoteIndex = filesStr.indexOf('"');
+                    switch (quoteIndex) {
+                        case -1:
+                            var segs = filesStr.split(' ');
+                            oldPath = segs[0].slice(2);
+                            newPath = segs[1].slice(2);
+                            break;
+
+                        case 0:
+                            var nextQuoteIndex = filesStr.indexOf('"', 2);
+                            oldPath = filesStr.slice(3, nextQuoteIndex);
+                            var newQuoteIndex = filesStr.indexOf('"', nextQuoteIndex + 1);
+                            if (newQuoteIndex < 0) {
+                                newPath = filesStr.slice(nextQuoteIndex + 4);
+                            }
+                            else {
+                                newPath = filesStr.slice(newQuoteIndex + 3, -1);
+                            }
+                            break;
+
+                        default:
+                            var segs = filesStr.split(' ');
+                            oldPath = segs[0].slice(2);
+                            newPath = segs[1].slice(3, -1);
+                            break;
+                    }
+                    
 
                     // read file
                     currentInfo = {
-                        oldPath: segs[2].slice(2),
-                        newPath: segs[3].slice(2),
+                        oldPath: oldPath,
+                        newPath: newPath,
                         hunks: []
                     };
 
