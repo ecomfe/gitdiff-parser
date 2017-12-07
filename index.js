@@ -38,7 +38,6 @@
                     var filesStr = line.slice(11);
                     var oldPath = null;
                     var newPath = null;
-                    console.log(filesStr)
 
                     var quoteIndex = filesStr.indexOf('"');
                     switch (quoteIndex) {
