@@ -158,8 +158,8 @@
                             content: line,
                             oldStart: match[1] - 0,
                             newStart: match[4] - 0,
-                            oldLines: match[3] - 0 || 0,
-                            newLines: match[6] - 0 || 0,
+                            oldLines: match[3] - 0 || 1,
+                            newLines: match[6] - 0 || 1,
                             changes: []
                         };
 
