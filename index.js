@@ -65,13 +65,15 @@
                             newPath = segs[1].slice(3, -1);
                             break;
                     }
-                    
+
 
                     // read file
                     currentInfo = {
                         oldPath: oldPath,
                         newPath: newPath,
-                        hunks: []
+                        hunks: [],
+                        oldEndingNewLine: true,
+                        newEndingNewLine: true
                     };
 
                     infos.push(currentInfo);
@@ -138,7 +140,7 @@
                                 break simiLoop;
 
                         }
-                        
+
                         if (!currentInfoType) {
                             currentInfoType = segs[0];
                         }
@@ -169,6 +171,7 @@
                     }
                     else {
                         var typeChar = line.slice(0, 1);
+                        console.log(typeChar);
                         var change = {
                             content: line.slice(1)
                         };
@@ -196,6 +199,15 @@
                                 changeOldLine++;
                                 changeNewLine++;
                                 break;
+
+                            case '\\': // Seems "no newline" is the only case starting with /
+                                var lastChange = currentHunk.changes[currentHunk.changes.length - 1];
+                                if (!lastChange.isDelete) {
+                                    currentInfo.newEndingNewLine = false;
+                                }
+                                if (!lastChange.isInsert) {
+                                    currentInfo.oldEndingNewLine = false;
+                                }
                         }
 
                         change.type && currentHunk.changes.push(change);
