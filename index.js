@@ -171,7 +171,6 @@
                     }
                     else {
                         var typeChar = line.slice(0, 1);
-                        console.log(typeChar);
                         var change = {
                             content: line.slice(1)
                         };
