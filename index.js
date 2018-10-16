@@ -150,6 +150,9 @@
                 }
                 else if (line.indexOf('Binary') === 0) {
                     currentInfo.isBinary = true;
+                    currentInfo.type = line.indexOf('/dev/null and') >= 0
+                        ? 'add'
+                        : (line.indexOf('and /dev/null') >= 0 ? 'delete' : 'modify');
                     stat = STAT_START;
                     currentInfo = null;
                 }
