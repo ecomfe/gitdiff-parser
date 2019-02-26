@@ -138,7 +138,28 @@
                                 }
 
                                 break simiLoop;
+                            case '---':
+                                var oldPath = segs[1];
+                                if (/\s\/dev\/null$/.test(oldPath)) {
+                                    currentInfo.oldPath = '/dev/null';
+                                    currentInfoType = 'add';
+                                } else {
+                                    currentInfoType = 'modify';
+                                    currentInfo.oldPath = oldPath.slice(2);
+                                }
 
+                                break;
+                            case '+++':
+                                var newPath = segs[1];
+                                if (/\s\/dev\/null$/.test(newPath)) {
+                                    currentInfo.newPath = '/dev/null';
+                                    currentInfoType = 'delete';
+                                } else {
+                                    currentInfo.newPath = newPath.slice(2);
+                                }
+
+                                stat = STAT_HUNK;
+                                break simiLoop;
                         }
 
                         if (!currentInfoType) {
