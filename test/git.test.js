@@ -40,4 +40,12 @@ describe("git specific tests", () => {
         expect(file.newPath).toBe("a.txt");
     });
 
+    it("should parse filename correctly if whitespace included", () => {
+        const diff = parse("edit-ws.diff");
+        const file = diff[0];
+        expect(file.type).toBe("modify");
+        expect(file.oldPath).toBe("a b/a.txt");
+        expect(file.newPath).toBe("a b/a.txt");
+    });
+
 });
