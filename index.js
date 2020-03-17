@@ -83,7 +83,7 @@
                                 currentInfo.newRevision = revs[1];
 
                                 if (segs[1]) {
-                                    currentInfo.oldMode = currentInfo.newMode = segs[2];
+                                    currentInfo.oldMode = currentInfo.newMode = segs[1];
                                 }
                                 break;
                             
