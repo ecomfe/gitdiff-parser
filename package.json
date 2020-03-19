@@ -11,7 +11,8 @@
     "jest": "^24.1.0"
   },
   "files": [
-    "index.js"
+    "index.js",
+    "index.d.ts"
   ],
   "repository": {
     "type": "git",
