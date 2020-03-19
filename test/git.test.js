@@ -14,6 +14,7 @@ describe("git specific tests", () => {
         expect(file.type).toBe("add");
         expect(file.oldPath).toBe("/dev/null");
         expect(file.newPath).toBe("a.txt");
+        expect(file.newMode).toBe('100644');
     });
 
     it("should have type delete", () => {
@@ -21,6 +22,7 @@ describe("git specific tests", () => {
         const file = diff[0];
         expect(file.type).toBe("delete");
         expect(file.oldPath).toBe("a.txt");
+        expect(file.oldMode).toBe('100644');
         expect(file.newPath).toBe("/dev/null");
     });
 

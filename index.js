@@ -50,20 +50,6 @@
                     // 5. 其它情况是modify
                     var currentInfoType = null;
 
-                    // read mode change
-                    var nextLine = lines[i + 1];
-                    if (nextLine.indexOf('old') === 0) {
-                        currentInfo.oldMode = nextLine.slice(9, 16);
-                        currentInfo.newMode = lines[i + 2].slice(9, 16);
-                        i += 2;
-                        nextLine = lines[i + 1];
-                    }
-
-                    // read similarity
-                    if (nextLine.indexOf('similarity') === 0) {
-                        currentInfo.similarity = parseInt(nextLine.split(' ')[2], 10);
-                        i += 1;
-                    }
 
                     // read type and index
                     var simiLine;
@@ -75,6 +61,18 @@
                             case 'diff': // diff --git
                                 i--;
                                 break simiLoop;
+
+                            case 'deleted':
+                            case 'new':
+                                var leftStr = simiLine.slice(spaceIndex + 1);
+                                if (leftStr.indexOf('file mode') === 0) {
+                                    currentInfo[infoType === 'new' ? 'newMode' : 'oldMode'] = leftStr.slice(10);
+                                }
+                                break;
+
+                            case 'similarity':
+                                currentInfo.similarity = parseInt(simiLine.split(' ')[2], 10);
+                                break;
 
                             case 'index':
                                 var segs = simiLine.slice(spaceIndex + 1).split(' ');
@@ -97,6 +95,7 @@
                                 else { // rename to
                                     currentInfo.newPath = infoStr.slice(3);
                                 }
+                                currentInfoType = infoType;
                                 break;
 
                             case '---':
@@ -119,10 +118,6 @@
                                 currentInfo.newPath = newPath;
                                 stat = STAT_HUNK;
                                 break simiLoop;
-                        }
-
-                        if (!currentInfoType) {
-                            currentInfoType = infoType;
                         }
                     }
 
