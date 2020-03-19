@@ -38,6 +38,8 @@ describe("git specific tests", () => {
         expect(file.type).toBe("modify");
         expect(file.oldPath).toBe("a.txt");
         expect(file.newPath).toBe("a.txt");
+        expect(file.oldMode).toBe('100644');
+        expect(file.newMode).toBe('100644');
     });
 
     it("should parse filename correctly if whitespace included", () => {
