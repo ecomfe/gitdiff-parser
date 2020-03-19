@@ -30,7 +30,7 @@ export interface File {
     oldPath: string;
     newPath: string;
     isBinary?: boolean;
-    type: 'add' | 'delete' | 'modify';
+    type: 'add' | 'delete' | 'modify' | 'rename' | 'copy';
 }
 
 export default {
