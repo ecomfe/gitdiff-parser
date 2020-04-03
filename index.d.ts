@@ -33,6 +33,10 @@ export interface File {
     type: 'add' | 'delete' | 'modify' | 'rename' | 'copy';
 }
 
-export default {
+declare type GitdiffParser = {
     parse(source: string): File[];
-};
+}
+
+declare const gitdiffParser: GitdiffParser;
+
+export default gitdiffParser;
