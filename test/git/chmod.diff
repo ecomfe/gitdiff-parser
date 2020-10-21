@@ -1,0 +1,9 @@
+diff --git a/a.txt b/a.txt
+old mode 100644
+new mode 100755
+index 7898192..7e8a165
+--- a/a.txt
++++ b/a.txt
+@@ -1 +1,2 @@
+ a
++a
