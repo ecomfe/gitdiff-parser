@@ -63,10 +63,11 @@
                                 break simiLoop;
 
                             case 'deleted':
+                            case 'old':
                             case 'new':
-                                var leftStr = simiLine.slice(spaceIndex + 1);
-                                if (leftStr.indexOf('file mode') === 0) {
-                                    currentInfo[infoType === 'new' ? 'newMode' : 'oldMode'] = leftStr.slice(10);
+                                var match = / mode (\d+)/.exec(simiLine);
+                                if (match) {
+                                    currentInfo[infoType === 'new' ? 'newMode' : 'oldMode'] = match[1];
                                 }
                                 break;
 
