@@ -1,0 +1,7 @@
+diff --git myApp/a.txt myApp/a.txt
+new file mode 100644
+index 0000000..7898192
+--- /dev/null
++++ myApp/a.txt
+@@ -0,0 +1 @@
++a

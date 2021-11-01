@@ -1,14 +1,14 @@
 {
   "name": "gitdiff-parser",
-  "version": "0.2.2",
+  "version": "0.2.3",
   "description": "",
   "main": "index.js",
   "scripts": {
     "test": "jest"
   },
   "devDependencies": {
-    "parse-diff": "0.4.0",
-    "jest": "^24.1.0"
+    "jest": "^24.1.0",
+    "parse-diff": "0.4.0"
   },
   "files": [
     "index.js",

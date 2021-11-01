@@ -14,9 +14,10 @@
          * 解析 gitdiff 消息
          *
          * @param {string} source gitdiff消息内容
+         * @param {string} noPrefix flag indicating if diff was generated with --no-prefix
          * @return {Object}
          */
-        parse: function (source) {
+        parse: function (source, noPrefix) {
             var infos = [];
             var stat = STAT_START;
             var currentInfo;
@@ -102,16 +103,16 @@
                                 var oldPath = simiLine.slice(spaceIndex + 1);
                                 var newPath = lines[++i].slice(4); // next line must be "+++ xxx"
                                 if (oldPath === '/dev/null') {
-                                    newPath = newPath.slice(2);
+                                    newPath = newPath.slice(!noPrefix ? 2 : 0);
                                     currentInfoType = 'add';
                                 }
                                 else if (newPath === '/dev/null') {
-                                    oldPath = oldPath.slice(2);
+                                    oldPath = oldPath.slice(!noPrefix ? 2 : 0);
                                     currentInfoType = 'delete';
                                 } else {
                                     currentInfoType = 'modify';
-                                    oldPath = oldPath.slice(2);
-                                    newPath = newPath.slice(2);
+                                    oldPath = oldPath.slice(!noPrefix ? 2 : 0);
+                                    newPath = newPath.slice(!noPrefix ? 2 : 0);
                                 }
 
                                 currentInfo.oldPath = oldPath;

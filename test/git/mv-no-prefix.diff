@@ -1,0 +1,4 @@
+diff --git myApp/b.txt myApp/c.txt
+similarity index 100%
+rename from myApp/b.txt
+rename to myApp/c.txt
