@@ -85,7 +85,7 @@
                                     currentInfo.oldMode = currentInfo.newMode = segs[1];
                                 }
                                 break;
-                            
+
 
                             case 'copy':
                             case 'rename':
@@ -126,11 +126,27 @@
                 }
                 else if (line.indexOf('Binary') === 0) {
                     currentInfo.isBinary = true;
-                    currentInfo.type = line.indexOf('/dev/null and') >= 0
-                        ? 'add'
-                        : (line.indexOf('and /dev/null') >= 0 ? 'delete' : 'modify');
+
+                    // line: "Binary files {oldPath} and {newPath} differ"
+                    let oldPath = line.split(' ')[2]
+                    let newPath = line.split(' ')[4]
+                    if (oldPath === '/dev/null') {
+                        currentInfo.type = 'add';
+                        currentInfo.oldPath = oldPath;
+                        currentInfo.newPath = newPath.slice(2);
+                    }
+                    else if (newPath === '/dev/null') {
+                        currentInfo.type = 'delete';
+                        currentInfo.oldPath = oldPath.slice(2);
+                        currentInfo.newPath = newPath;
+                    }
+                    else {
+                        currentInfo.type = 'modify';
+                        currentInfo.oldPath = oldPath.slice(2);
+                        currentInfo.newPath = newPath.slice(2);
+                    }
+
                     stat = STAT_START;
-                    currentInfo = null;
                 }
                 else if (stat === STAT_HUNK) {
                     if (line.indexOf('@@') === 0) {
