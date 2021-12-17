@@ -59,6 +59,7 @@
 
                         switch (infoType) {
                             case 'diff': // diff --git
+                            case 'Binary':
                                 i--;
                                 break simiLoop;
 
