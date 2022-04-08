@@ -17,8 +17,26 @@ describe("git specific tests", () => {
         expect(file.newMode).toBe('100644');
     });
 
+    it("should have type add for empty files", () => {
+        const diff = parse("add-empty.diff");
+        const file = diff[0];
+        expect(file.type).toBe("add");
+        expect(file.oldPath).toBe("/dev/null");
+        expect(file.newPath).toBe("a.txt");
+        expect(file.newMode).toBe('100644');
+    });
+
     it("should have type delete", () => {
         const diff = parse("rm.diff");
+        const file = diff[0];
+        expect(file.type).toBe("delete");
+        expect(file.oldPath).toBe("a.txt");
+        expect(file.oldMode).toBe('100644');
+        expect(file.newPath).toBe("/dev/null");
+    });
+
+    it("should have type delete for empty files", () => {
+        const diff = parse("rm-empty.diff");
         const file = diff[0];
         expect(file.type).toBe("delete");
         expect(file.oldPath).toBe("a.txt");
