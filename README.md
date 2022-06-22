@@ -21,16 +21,31 @@ gitDiffParser.parse(gitDiffText);
 ### API
 
 ```ts
-export interface Change {
+export type ChangeType = 'insert' | 'delete' | 'normal';
+
+export interface InsertChange {
+    type: 'insert';
     content: string;
-    type: 'insert' | 'delete' | 'normal';
-    isInsert?: boolean;
-    isDelete?: boolean;
-    isNormal?: boolean;
-    lineNumber?: number;
-    oldLineNumber?: number;
-    newLineNumber?: number;
+    lineNumber: number;
+    isInsert: true;
 }
+
+export interface DeleteChange {
+    type: 'delete';
+    content: string;
+    lineNumber: number;
+    isDelete: true;
+}
+
+export interface NormalChange {
+    type: 'normal';
+    content: string;
+    isNormal: true;
+    oldLineNumber: number;
+    newLineNumber: number;
+}
+
+export type Change = InsertChange | DeleteChange | NormalChange;
 
 export interface Hunk {
     content: string;
@@ -40,6 +55,8 @@ export interface Hunk {
     newLines: number;
     changes: Change[];
 }
+
+export type FileType = 'add' | 'delete' | 'modify' | 'rename' | 'copy';
 
 export interface File {
     hunks: Hunk[];
@@ -53,7 +70,7 @@ export interface File {
     oldPath: string;
     newPath: string;
     isBinary?: boolean;
-    type: 'add' | 'delete' | 'modify' ｜ 'rename';
+    type: FileType;
 }
 
 export function parse(source: string): File[];
