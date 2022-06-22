@@ -56,7 +56,7 @@ export interface File {
     type: 'add' | 'delete' | 'modify' ｜ 'rename';
 }
 
-export default {
-    parse(source: string): File[];
-};
+export function parse(source: string): File[];
+
+export as namespace gitDiffParser;
 ```

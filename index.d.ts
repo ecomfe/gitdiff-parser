@@ -50,6 +50,6 @@ export interface File {
     type: FileType;
 }
 
-export default {
-    parse(source: string): File[];
-};
+export function parse(source: string): File[];
+
+export as namespace gitDiffParser;
