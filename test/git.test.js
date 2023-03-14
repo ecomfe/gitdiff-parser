@@ -52,4 +52,13 @@ describe("git specific tests", () => {
         expect(file.newPath).toBe("a b/a.txt");
     });
 
+    it("should parse binary delta diff", () => {
+        const diff = parse("delta.diff");
+        const file = diff[0];
+        console.log(file);
+        expect(file.type).toBe("modify");
+        expect(file.oldPath).toBe("RnDiffApp/android/gradle/wrapper/gradle-wrapper.jar");
+        expect(file.newPath).toBe("RnDiffApp/android/gradle/wrapper/gradle-wrapper.jar");
+    });
+
 });

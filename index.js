@@ -8,6 +8,44 @@
     var STAT_FILE_META = 3;
     var STAT_HUNK = 5;
 
+    function parsePathFromFirstLine(line) {
+        var filesStr = line.slice(11);
+        var oldPath = null;
+        var newPath = null;
+
+        var quoteIndex = filesStr.indexOf('"');
+        switch (quoteIndex) {
+            case -1:
+                var segs = filesStr.split(' ');
+                oldPath = segs[0].slice(2);
+                newPath = segs[1].slice(2);
+                break;
+
+            case 0:
+                var nextQuoteIndex = filesStr.indexOf('"', 2);
+                oldPath = filesStr.slice(3, nextQuoteIndex);
+                var newQuoteIndex = filesStr.indexOf('"', nextQuoteIndex + 1);
+                if (newQuoteIndex < 0) {
+                    newPath = filesStr.slice(nextQuoteIndex + 4);
+                }
+                else {
+                    newPath = filesStr.slice(newQuoteIndex + 3, -1);
+                }
+                break;
+
+            default:
+                var segs = filesStr.split(' ');
+                oldPath = segs[0].slice(2);
+                newPath = segs[1].slice(3, -1);
+                break;
+        }
+
+        return {
+            oldPath: oldPath,
+            newPath: newPath
+        };
+    }
+
 
     var parser = {
         /**
@@ -23,6 +61,7 @@
             var currentHunk;
             var changeOldLine;
             var changeNewLine;
+            var paths;
 
 
             var lines = source.split('\n');
@@ -34,10 +73,13 @@
 
                 if (line.indexOf('diff --git') === 0) {
                     // read file
+                    paths = parsePathFromFirstLine(line);
                     currentInfo = {
                         hunks: [],
                         oldEndingNewLine: true,
-                        newEndingNewLine: true
+                        newEndingNewLine: true,
+                        oldPath: paths.oldPath,
+                        newPath: paths.newPath
                     };
 
                     infos.push(currentInfo);
@@ -84,7 +126,6 @@
                                     currentInfo.oldMode = currentInfo.newMode = segs[1];
                                 }
                                 break;
-                            
 
                             case 'copy':
                             case 'rename':
@@ -114,8 +155,12 @@
                                     newPath = newPath.slice(2);
                                 }
 
-                                currentInfo.oldPath = oldPath;
-                                currentInfo.newPath = newPath;
+                                if (oldPath) {
+                                    currentInfo.oldPath = oldPath;
+                                }
+                                if (newPath) {
+                                    currentInfo.newPath = newPath;
+                                }
                                 stat = STAT_HUNK;
                                 break simiLoop;
                         }
