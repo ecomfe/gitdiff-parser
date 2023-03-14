@@ -50,6 +50,10 @@ export interface File {
     type: FileType;
 }
 
-export default {
+declare type GitdiffParser = {
     parse(source: string): File[];
-};
+}
+
+declare const gitdiffParser: GitdiffParser;
+
+export default gitdiffParser;
