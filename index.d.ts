@@ -1,5 +1,3 @@
-export type ChangeType = 'insert' | 'delete' | 'normal';
-
 export interface InsertChange {
     type: 'insert';
     content: string;
@@ -23,6 +21,8 @@ export interface NormalChange {
 }
 
 export type Change = InsertChange | DeleteChange | NormalChange;
+
+export type ChangeType = Change['type'];
 
 export interface Hunk {
     content: string;
@@ -50,6 +50,6 @@ export interface File {
     type: FileType;
 }
 
-export default {
-    parse(source: string): File[];
-};
+export function parse(source: string): File[];
+
+export as namespace gitDiffParser;
