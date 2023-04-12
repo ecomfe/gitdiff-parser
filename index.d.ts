@@ -1,5 +1,3 @@
-export type ChangeType = 'insert' | 'delete' | 'normal';
-
 export interface InsertChange {
     type: 'insert';
     content: string;
@@ -23,6 +21,8 @@ export interface NormalChange {
 }
 
 export type Change = InsertChange | DeleteChange | NormalChange;
+
+export type ChangeType = Change['type'];
 
 export interface Hunk {
     content: string;
