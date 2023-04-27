@@ -44,6 +44,16 @@ describe("git specific tests", () => {
         expect(file.newMode).toBe('100644');
     });
 
+    it("should have old and new modes", () => {
+        const diff = parse("chmod.diff");
+        const file = diff[0];
+        expect(file.type).toBe("modify");
+        expect(file.oldPath).toBe("a.txt");
+        expect(file.newPath).toBe("a.txt");
+        expect(file.oldMode).toBe('100644');
+        expect(file.newMode).toBe('100755');
+    });
+
     it("should parse filename correctly if whitespace included", () => {
         const diff = parse("edit-ws.diff");
         const file = diff[0];
