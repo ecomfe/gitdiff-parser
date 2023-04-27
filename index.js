@@ -110,6 +110,11 @@
                                 if (leftStr.indexOf('file mode') === 0) {
                                     currentInfo[infoType === 'new' ? 'newMode' : 'oldMode'] = leftStr.slice(10);
                                 }
+                                currentInfoType = infoType === 'new' ? 'add' : 'delete';
+                                var prevLine = lines[i - 1];
+                                var fileName = prevLine.substring(prevLine.indexOf(' b/') + 3);
+                                currentInfo.newPath = infoType === 'new' ? fileName : '/dev/null';
+                                currentInfo.oldPath = infoType === 'new' ? '/dev/null' : fileName;
                                 break;
 
                             case 'similarity':
